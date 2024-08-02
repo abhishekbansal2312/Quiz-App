@@ -287,15 +287,13 @@
       next.addEventListener("click", nextQuestion);
       finish.addEventListener("click", showResult);
       function startQuiz() {
+        startTimer();
         start.style.display = "none";
         next.style.display = "inline-block";
         finish.style.display = "inline-block";
         showQuestion();
-        startTimer();
       }
       function showQuestion() {
-        clearInterval(timer);
-        startTimer();
         const q = quiz[currentIndex];
         question.textContent = `Q${q.index}: ${q.question}`;
         options.innerHTML = "";
@@ -333,14 +331,19 @@
         options.style.display = "none";
         next.style.display = "none";
         finish.style.display = "none";
+        timerElement.style.display = "none";
         complete.textContent = `Quiz complete! Your score is ${score} out of ${quiz.length}`;
       }
       function startTimer() {
-        timeLeft = 30;
-        timerElement.textContent = `Time left: ${timeLeft}s`;
+        timeLeft = 300;
+        timerElement.textContent = `Time left: ${Math.floor(timeLeft / 60)}m ${
+          timeLeft % 60
+        }s`;
         timer = setInterval(() => {
           timeLeft--;
-          timerElement.textContent = `Time left: ${timeLeft}s`;
+          const minutes = Math.floor(timeLeft / 60);
+          const seconds = timeLeft % 60;
+          timerElement.textContent = `Time left: ${minutes}m ${seconds}s`;
           if (timeLeft <= 0) {
             clearInterval(timer);
             showResult();
